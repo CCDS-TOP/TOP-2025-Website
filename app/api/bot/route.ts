@@ -266,21 +266,7 @@ bot.command("setscore", async (ctx) => {
 
 bot.command("reset", async (ctx) => {
   try {
-    // Get all OGs
-    const allOGs = getAllOGs();
-
-    // Process each OG and its subOGs
-    for (const og of allOGs) {
-      for (const subOG of og.subOGs) {
-        // Remove all cards
-        while (subOG.cards.length > 0) {
-          await removeCardFromSubOG(subOG.subOGName, subOG.cards[0]);
-        }
-
-        // Reset score
-        subOG.resetScore();
-      }
-    }
+    initializeData();
 
     await ctx.reply(`🔄 Complete system reset successful!\n`);
   } catch (error) {
