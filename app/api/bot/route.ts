@@ -264,6 +264,34 @@ bot.command("setscore", async (ctx) => {
   await ctx.reply(`Score for ${subOG.subOGName} set to ${amount}.`);
 });
 
+bot.command("reset", async (ctx) => {
+  try {
+    // Get all OGs
+    const allOGs = getAllOGs();
+
+    // Process each OG and its subOGs
+    for (const og of allOGs) {
+      for (const subOG of og.subOGs) {
+        // Remove all cards
+        while (subOG.cards.length > 0) {
+          await removeCardFromSubOG(subOG.subOGName, subOG.cards[0]);
+        }
+
+        // Reset score
+        subOG.resetScore();
+      }
+    }
+
+    await ctx.reply(`🔄 Complete system reset successful!\n`);
+  } catch (error) {
+    await ctx.reply(
+      `Error during reset: ${
+        error instanceof Error ? error.message : "Unknown error"
+      }`
+    );
+  }
+});
+
 // Note: Either use this or the webhookCallback function
 // bot.start();
 export const POST = webhookCallback(bot, "std/http");
